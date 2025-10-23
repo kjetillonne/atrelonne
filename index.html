@@ -125,20 +125,29 @@
     </div>
   </section>
 
-  <!-- GALLERI -->
-  <section id="galleri" class="fade-section py-24 bg-white">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 text-center">
-      <h2 class="text-3xl md:text-4xl font-semibold mb-10 text-[#2F4F2F]">Galleri</h2>
-      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 gap-4 sm:gap-6">
-        <img src="images/trefelling-stavanger.jpg" alt="Trefelling i Stavanger" class="rounded-lg shadow-md object-cover w-full aspect-[4/3]">
-        <img src="images/beskjæring-sandnes.jpg" alt="Beskjæring i Sandnes" class="rounded-lg shadow-md object-cover w-full aspect-[4/3]">
-        <img src="images/vindfallhogst-klepp.jpg" alt="Vindfallhogst i Klepp" class="rounded-lg shadow-md object-cover w-full aspect-[4/3]">
-        <img src="images/opprydding-tomt-jaeren.jpg" alt="Opprydding på tomt på Jæren" class="rounded-lg shadow-md object-cover w-full aspect-[4/3]">
-        <img src="images/vedproduksjon-flis.jpg" alt="Ved og flisproduksjon" class="rounded-lg shadow-md object-cover w-full aspect-[4/3]">
-        <img src="images/trearbeid-natur.jpg" alt="Trearbeid og naturmiljø" class="rounded-lg shadow-md object-cover w-full aspect-[4/3]">
-      </div>      
-    </div>
-  </section>
+ <!-- GALLERI -->
+<section id="galleri" class="fade-section py-24 bg-white">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 text-center">
+    <h2 class="text-3xl md:text-4xl font-semibold mb-10 text-[#2F4F2F]">Galleri</h2>
+    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 gap-4 sm:gap-6">
+      <img src="images/trefelling-stavanger.jpg" alt="Trefelling i Stavanger" class="gallery-img rounded-lg shadow-md object-cover w-full aspect-[4/3] cursor-pointer transition-transform hover:scale-[1.02]" loading="lazy">
+      <img src="images/beskjæring-sandnes.jpg" alt="Beskjæring i Sandnes" class="gallery-img rounded-lg shadow-md object-cover w-full aspect-[4/3] cursor-pointer transition-transform hover:scale-[1.02]" loading="lazy">
+      <img src="images/vindfallhogst-klepp.jpg" alt="Vindfallhogst i Klepp" class="gallery-img rounded-lg shadow-md object-cover w-full aspect-[4/3] cursor-pointer transition-transform hover:scale-[1.02]" loading="lazy">
+      <img src="images/opprydding-tomt-jaeren.jpg" alt="Opprydding på tomt på Jæren" class="gallery-img rounded-lg shadow-md object-cover w-full aspect-[4/3] cursor-pointer transition-transform hover:scale-[1.02]" loading="lazy">
+      <img src="images/vedproduksjon-flis.jpg" alt="Ved og flisproduksjon" class="gallery-img rounded-lg shadow-md object-cover w-full aspect-[4/3] cursor-pointer transition-transform hover:scale-[1.02]" loading="lazy">
+      <img src="images/trearbeid-natur.jpg" alt="Trearbeid og naturmiljø" class="gallery-img rounded-lg shadow-md object-cover w-full aspect-[4/3] cursor-pointer transition-transform hover:scale-[1.02]" loading="lazy">
+    </div>      
+  </div>
+
+  <!-- LIGHTBOX OVERLAY -->
+  <div id="lightbox" class="hidden fixed inset-0 bg-black/90 flex items-center justify-center z-50">
+    <button id="prev" class="absolute left-4 text-white text-4xl font-bold px-4 py-2 hover:text-gray-400">&#10094;</button>
+    <img id="lightbox-img" src="" class="max-h-[90vh] max-w-[90vw] rounded-lg shadow-lg">
+    <button id="next" class="absolute right-4 text-white text-4xl font-bold px-4 py-2 hover:text-gray-400">&#10095;</button>
+    <button id="close" class="absolute top-6 right-6 text-white text-4xl font-bold hover:text-gray-400">&times;</button>
+  </div>
+</section>
+
 
   <!-- KONTAKT -->
   <section id="kontakt" class="fade-section py-24 bg-[#F9FAF9]">
@@ -210,6 +219,45 @@
     document.querySelectorAll('#mobileMenu a').forEach(link => {
       link.addEventListener('click', () => mobileMenu.classList.add('hidden'));
     });
+
+// LIGHTBOX FUNKSJON
+const galleryImages = document.querySelectorAll('.gallery-img');
+const lightbox = document.getElementById('lightbox');
+const lightboxImg = document.getElementById('lightbox-img');
+const closeBtn = document.getElementById('close');
+const nextBtn = document.getElementById('next');
+const prevBtn = document.getElementById('prev');
+let currentIndex = 0;
+
+galleryImages.forEach((img, index) => {
+  img.addEventListener('click', () => {
+    currentIndex = index;
+    showImage();
+    lightbox.classList.remove('hidden');
+  });
+});
+
+function showImage() {
+  lightboxImg.src = galleryImages[currentIndex].src;
+}
+
+closeBtn.addEventListener('click', () => lightbox.classList.add('hidden'));
+nextBtn.addEventListener('click', () => {
+  currentIndex = (currentIndex + 1) % galleryImages.length;
+  showImage();
+});
+prevBtn.addEventListener('click', () => {
+  currentIndex = (currentIndex - 1 + galleryImages.length) % galleryImages.length;
+  showImage();
+});
+
+// Lukke med ESC
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') lightbox.classList.add('hidden');
+  if (e.key === 'ArrowRight') { currentIndex = (currentIndex + 1) % galleryImages.length; showImage(); }
+  if (e.key === 'ArrowLeft') { currentIndex = (currentIndex - 1 + galleryImages.length) % galleryImages.length; showImage(); }
+});
+
   </script>
 </body>
 </html>
